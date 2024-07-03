@@ -121,7 +121,7 @@ int main() {
   //
   //
       float xmin, xmax, ymin, ymax; // Borders of the area to be plotted
-      FILE* input_file = fopen("./params2", "r");
+      FILE* input_file = fopen("./files/params2", "r");
       fscanf(input_file, "%f", &xmin);
       fscanf(input_file, "%f", &xmax);
       fscanf(input_file, "%f", &ymin);

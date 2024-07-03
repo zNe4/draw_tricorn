@@ -61,7 +61,7 @@ def drag2(event):
     with open("./files/params2", "w") as f:
         f.write(f'{xmin}\n{xmax}\n{ymin}\n{ymax}')
     
-    # REWRITE THE TRICORN
+    # REWRITE THE JULIA SET
     call(["./draw_j"])
     global img2
     global panel2
@@ -98,7 +98,7 @@ def drag(event):
         f.write(f'{xmin}\n{xmax}\n{ymin}\n{ymax}')
     
     # REWRITE THE TRICORN
-    call(["./draw"])
+    call(["./draw_mmap"])
     global img
     global panel
     img = ImageTk.PhotoImage(Image.open("./3.ppm"))
@@ -117,6 +117,8 @@ def on_click(event):
     with open("./files/coords", "w") as f:
         f.write(f"{x1}\n{y1}")
     call(["./draw_j"])
+
+    # REWRITE THE JULIA SET
     global img2
     global panel2
     img2 = ImageTk.PhotoImage(Image.open("./julia.ppm"))
