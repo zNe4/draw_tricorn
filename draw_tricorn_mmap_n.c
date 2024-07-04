@@ -141,7 +141,7 @@ complex double ApproximateMultiplierMap(complex double c, int period, double eps
         d = (4.0*z*z*z+4*z*conj(c))*d;
         z = (z*z + conj(c))*(z*z + conj(c)) + c;
       }
-    } else d = 100000000;
+    } else d = 1000000000;
 
     return sqrt(cabs(d));
 }
@@ -208,7 +208,7 @@ int main() {
       fclose(input_file);
   //
   //
-  const char *filename = "3.ppm";
+  const char *filename = "tricorn.ppm";
   unsigned char *image = image_new(width, height);
   render(image,  PeriodMax, width, height, xmin, ymin, xmax, ymax);
   image_save_ppm(image, width, height, filename);

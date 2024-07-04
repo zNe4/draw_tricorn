@@ -89,7 +89,7 @@ static inline void color_tricorn(unsigned char *image, int width, int i, int j, 
   }
 }
 
-static inline void render(unsigned char *image, int width, int height, float xmin, float ymin, float xmax, float ymax) {
+static inline void render(unsigned char *image, int width, int height, double xmin, double ymin, double xmax, double ymax) {
 
   #pragma omp parallel for schedule(dynamic, 1)
     for (int j = 0; j < height; ++j) {
@@ -97,7 +97,7 @@ static inline void render(unsigned char *image, int width, int height, float xmi
         double x = xmin + i * (xmax - xmin)/width;
         double y = ymin + j * (ymax - ymin)/height;
         complex double c = x + I * y;
-		complex double z = 0.0;
+		    complex double z = 0.0;
 
         // check if its inside
         // complex double c = -1.07+0.12*I;
@@ -119,17 +119,16 @@ int main() {
   int width = 700;
   int height = 700;
   //
-  //
-      float xmin, xmax, ymin, ymax; // Borders of the area to be plotted
-      FILE* input_file = fopen("./files/params2", "r");
-      fscanf(input_file, "%f", &xmin);
-      fscanf(input_file, "%f", &xmax);
-      fscanf(input_file, "%f", &ymin);
-      fscanf(input_file, "%f", &ymax);
+      double xmin, xmax, ymin, ymax; // Borders of the area to be plotted
+      FILE* input_file = fopen("./files/params", "r");
+      fscanf(input_file, "%lf", &xmin);
+      fscanf(input_file, "%lf", &xmax);
+      fscanf(input_file, "%lf", &ymin);
+      fscanf(input_file, "%lf", &ymax);
       fclose(input_file);
   //
   //
-  const char *filename = "multicorn4.ppm";
+  const char *filename = "tricorn.ppm";
   unsigned char *image = image_new(width, height);
   render(image, width, height, xmin, ymin, xmax, ymax);
   image_save_ppm(image, width, height, filename);

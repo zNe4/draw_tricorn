@@ -90,7 +90,7 @@ static inline void color_tricorn(unsigned char *image, int width, int i, int j, 
   }
 }
 
-static inline void render(unsigned char *image, int width, int height, float xmin, float ymin, float xmax, float ymax, complex double c) {
+static inline void render(unsigned char *image, int width, int height, double xmin, double ymin, double xmax, double ymax, complex double c) {
 
   #pragma omp parallel for schedule(dynamic, 1)
     for (int j = 0; j < height; ++j) {
@@ -120,12 +120,12 @@ int main() {
   int height = 700;
   //
   //
-      float xmin, xmax, ymin, ymax; // Borders of the area to be plotted
+      double xmin, xmax, ymin, ymax; // Borders of the area to be plotted
       FILE* input_file = fopen("./files/params2", "r");
-      fscanf(input_file, "%f", &xmin);
-      fscanf(input_file, "%f", &xmax);
-      fscanf(input_file, "%f", &ymin);
-      fscanf(input_file, "%f", &ymax);
+      fscanf(input_file, "%lf", &xmin);
+      fscanf(input_file, "%lf", &xmax);
+      fscanf(input_file, "%lf", &ymin);
+      fscanf(input_file, "%lf", &ymax);
       fclose(input_file);
       double x, y;
       input_file = fopen("./files/coords", "r");

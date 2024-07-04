@@ -28,24 +28,29 @@ static inline void image_poke(unsigned char *image, int width, int i, int j, int
 int main() {
     unsigned int width = 700, height = 700;  //Resolution;
     int i = 0;                    //Iteration counter;
-    const char* filename = "tricorn.ppm";
+    const char* filename = "julia.ppm";
 
 
     double xmin, xmax, ymin, ymax; // Borders of the area to be plotted
-    FILE* input_file = fopen("./files/params", "r");
+    FILE* input_file = fopen("./files/params2", "r");
     fscanf(input_file, "%lf", &xmin);
     fscanf(input_file, "%lf", &xmax);
     fscanf(input_file, "%lf", &ymin);
     fscanf(input_file, "%lf", &ymax);
     fclose(input_file);
     int times_iter;
-    input_file = fopen("./files/iter_param_tric", "r");
+    input_file = fopen("./files/iter_param_j", "r");
     fscanf(input_file, "%d", &times_iter);
     int max_iters = times_iter * 255;
     fclose(input_file);
+    double cx, cy;
+    input_file = fopen("./files/coords", "r");
+    fscanf(input_file, "%lf", &cx);
+    fscanf(input_file, "%lf", &cy);
+    fclose(input_file);
 
     unsigned int xpix = 0, ypix = 0;
-    float x, y;
+    double x, y;
     long double Rez, Imz, Rez_new, Imz_new;
     unsigned char* image = malloc(width * height * 3 * sizeof(unsigned char));
     for (ypix = 0; ypix < height; ypix++) {
@@ -54,8 +59,8 @@ int main() {
             y = ymin + ypix * (ymax - ymin)/height;
             Rez = x; Imz = y;
             for (i = 0; Rez*Rez + Imz*Imz <= 4; i++) {
-                Rez_new = Rez*Rez - Imz*Imz + x;
-                Imz_new = -2*Rez*Imz + y;
+                Rez_new = Rez*Rez - Imz*Imz + cx;
+                Imz_new = -2*Rez*Imz + cy;
                 Rez = Rez_new;
                 Imz = Imz_new;
                 if (i == max_iters) break;
