@@ -11,9 +11,9 @@ Caution: The python funcion subprocess.call() is used in order to run the c code
 To use the program just execute `make && python draw.py` inside the containing folder.
 
 - To redraw a Julia set for a c value, left click on the image of the tricorn.
-- To zoom into an image, use the right click draw on an area of the image.
+- To zoom into an image, left click and drag on an area of the image.
 - To reset an image press `r` while focusing on the window containing the image.
-- To stop the program press `ESC` while focusing any window.
+- To stop the program press `ESC` while focusing any window spawned by the program.
 #### While focusing the window containing the Tricorn
 - Use the keys `b`, `c` and `n` to change between greyscale + escape time, colored + escape time and newton multiplier map types of drawing.
 - Use the keys `1-4` to adjust number of max iterations. (Implemented but doesn't seem to add detail to the image)
