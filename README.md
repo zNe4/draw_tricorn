@@ -6,11 +6,11 @@ Most code was adapted from https://commons.wikimedia.org/wiki/File:Mandelbrot_se
 The python code is not fully optimized since I'm not so familiar with making GUIs.
 
 # Usage
-To use the program just execute `make && python draw.py` inside the containing folder.
-
 Caution: The python funcion subprocess.call() is used in order to run the c code in the python GUI, which may be unsafe.
 
-- To redraw a Julia set, left click on the image of the tricorn.
+To use the program just execute `make && python draw.py` inside the containing folder.
+
+- To redraw a Julia set for a c value, left click on the image of the tricorn.
 - To zoom into an image, use the right click draw on an area of the image.
 - To reset an image press `r` while focusing on the window containing the image.
 - To stop the program press `ESC` while focusing any window.
@@ -22,6 +22,8 @@ Caution: The python funcion subprocess.call() is used in order to run the c code
 - Use the keys `b` and `c` to change between greyscale + escape time and colored + escape time type of drawing.
 ## To do
 - Use the `f` key to change to floquet multiplier map drawing of the tricorn.
+- Add indicator for c value in the tricorn and for the z values in the julia set
+- Add modes for multibrots and multicorns.
 - Use the `s` key to save image/parameters
 - Make a pretty GUI that adds easier user input and has buttons to interact with the program.
 - Refactor and reorganize the code.
