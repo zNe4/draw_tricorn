@@ -29,6 +29,8 @@ def stop(event):
         f.write(f'-2.0\n2.0\n-2.0\n2.0')
     with open("./files/params2", "w") as f:
         f.write(f'-2.0\n2.0\n-2.0\n2.0')
+    with open("./files/coords", "w") as f:
+        f.write(f'0.0\n0.0')
     root.destroy()
 
 def reset(event):

@@ -21,7 +21,8 @@ Caution: The python funcion subprocess.call() is used in order to run the c code
 - Use the keys `1-4` to adjust number of iterations.
 - Use the keys `b` and `c` to change between greyscale + escape time and colored + escape time type of drawing.
 ## To do
-- Use the 'f' key to change to floquet multiplier map drawing of the tricorn.
+- Use the `f` key to change to floquet multiplier map drawing of the tricorn.
+- Use the `s` key to save image/parameters
 - Make a pretty GUI that adds easier user input and has buttons to interact with the program.
 - Refactor and reorganize the code.
 - Remove spooky use of call in draw.py
