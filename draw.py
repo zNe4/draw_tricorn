@@ -27,7 +27,7 @@ def redraw_tricorn():
 def stop(event):
     with open("./files/params", "w") as f:
         f.write(f'-2.0\n2.0\n-2.0\n2.0')
-    with open("./params2", "w") as f:
+    with open("./files/params2", "w") as f:
         f.write(f'-2.0\n2.0\n-2.0\n2.0')
     root.destroy()
 
@@ -246,7 +246,7 @@ NAME_JULIA_IMAGE = "julia.ppm"
 
 with open("./files/params", "w") as f:
     f.write(f'-2.0\n2.0\n-2.0\n2.0')
-with open("./params2", "w") as f:
+with open("./files/params2", "w") as f:
     f.write(f'-2.0\n2.0\n-2.0\n2.0')
 Tx = Ty = 0.0
 Tx_new = Ty_new = 0.0
