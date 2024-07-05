@@ -3,7 +3,7 @@ C program with Python GUI wrapper for drawing fractals (Multicorn, Mandelbrot, J
 
 Most code was adapted from https://commons.wikimedia.org/wiki/File:Mandelbrot_set_-_multiplier_map.png.
 
-The python code is not fully optimized since I'm not so familiar with making GUIs.
+The python code is not pretty since I'm not so familiar with making GUIs.
 
 # Usage
 Caution: The python funcion subprocess.call() is used in order to run the c code in the python GUI, which may be unsafe.
