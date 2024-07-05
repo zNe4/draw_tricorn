@@ -44,6 +44,8 @@ def reset2(event):
     redraw_julia()
 
 def hold2(event):
+    root.bind("<Button-3>", stop_selection)
+    root2.bind("<Button-3>", stop_selection)
     global Jx, Jy
     Jx = event.x
     Jy = event.y
@@ -74,6 +76,8 @@ def release2(event):
         redraw_julia()
     else:
         canvas2.delete(julia_rect)
+    root.unbind("<Button-3>")
+    root2.unbind("<Button-3>")
 
 def on_move_press2(event):
     with open("./files/params2", "r") as f:
@@ -88,9 +92,11 @@ def on_move_press2(event):
     ## Just draw a rectangle to show zoom area
     global julia_rect
     canvas2.delete(julia_rect)
-    julia_rect = canvas2.create_rectangle(xmin, ymin, xmax, ymax)
+    julia_rect = canvas2.create_rectangle(xmin, ymin, xmax, ymax, outline='#482C3D', width=2)
 
 def hold(event):
+    root.bind("<Button-3>", stop_selection)
+    root2.bind("<Button-3>", stop_selection)
     global Tx, Ty
     Tx = event.x
     Ty = event.y
@@ -130,6 +136,8 @@ def release(event):
         with open("./files/params", "w") as f:
             f.write(f'{xmin}\n{xmax}\n{ymin}\n{ymax}')
         redraw_tricorn()
+    root.unbind("<Button-3>")
+    root2.unbind("<Button-3>")
 
 def on_move_press(event):
     global tricorn_rect
@@ -144,7 +152,35 @@ def on_move_press(event):
     ymax = max(Ty, Ty_new)
     ## Just draw a rectangle to show zoom area
     canvas1.delete(tricorn_rect)
-    tricorn_rect = canvas1.create_rectangle(xmin, ymin, xmax, ymax)
+    tricorn_rect = canvas1.create_rectangle(xmin, ymin, xmax, ymax, outline='#482C3D', width=2)
+
+def bind_again(event):
+    root.bind("<ButtonPress-1>", hold)
+    root.bind("<ButtonRelease-1>", release)
+    root.bind("<B1-Motion>", on_move_press)
+    root2.bind("<ButtonPress-1>", hold2)
+    root2.bind("<ButtonRelease-1>", release2)
+    root2.bind("<B1-Motion>", on_move_press2)
+
+
+def stop_selection(event):
+    print("Stopping selection...")
+
+    root.unbind("<ButtonRelease-1>")
+    root.unbind("<ButtonPress-1>")
+    root.unbind("<B1-Motion>")
+
+    root2.unbind("<ButtonRelease-1>")
+    root2.unbind("<ButtonPress-1>")
+    root2.unbind("<B1-Motion>")
+
+    root.bind("<ButtonRelease-1>", bind_again)
+    root2.bind("<ButtonRelease-1>", bind_again)
+
+    global tricorn_rect, julia_rect
+    canvas1.delete(tricorn_rect)
+    canvas2.delete(julia_rect)
+
 
 def change_newton(event):
     global T
@@ -166,7 +202,7 @@ def num_handler_tricorn(event):
     if 1 <= n <= 4:
         with open("./files/iter_param_tric", "w") as f:
             f.write(str(n))
-            redraw_tricorn()
+        redraw_tricorn()
 
 def change_grayscale_j(event):
     global J
@@ -183,13 +219,14 @@ def num_handler_julia(event):
     if 1 <= n <= 4:
         with open("./files/iter_param_j", "w") as f:
             f.write(str(n))
-            redraw_julia()
+        redraw_julia()
 ### Boring stuff
 root = tk.Tk()
 root.bind("<Escape>", stop)
 root.bind("<ButtonPress-1>", hold)
 root.bind("<ButtonRelease-1>", release)
 root.bind("<B1-Motion>", on_move_press)
+
 root.bind("r", reset)
 root.bind("b", change_grayscale)
 root.bind("c", change_colored)
@@ -207,7 +244,7 @@ y = (hs/2) - (h/2)
 root.geometry('%dx%d+%d+%d' % (w, h, x, y))
 canvas1 = tk.Canvas(height=700, width=700)
 canvas1.pack()
-img1 = ImageTk.PhotoImage(Image.open("./tricorn.png"))
+img1 = ImageTk.PhotoImage(Image.open("./img/tricorn.png"))
 imgContainer1 = canvas1.create_image(0, 0, image=img1, anchor='nw')
 tricorn_rect = 0
 
@@ -221,6 +258,8 @@ root2.bind("<Escape>", stop)
 root2.bind("<ButtonPress-1>", hold2)
 root2.bind("<ButtonRelease-1>", release2)
 root2.bind("<B1-Motion>", on_move_press2)
+
+
 root2.bind("r", reset2)
 root2.bind("b", change_grayscale_j)
 root2.bind("c", change_colored_j)
@@ -229,7 +268,7 @@ for i in range(10):
 
 canvas2 = tk.Canvas(root2, height=700, width=700)
 canvas2.pack()
-img2 = ImageTk.PhotoImage(Image.open("./julia.png"))
+img2 = ImageTk.PhotoImage(Image.open("./img/julia.png"))
 imgContainer2 = canvas2.create_image(0, 0, image=img2, anchor='nw')
 julia_rect = 0
 # panel = tk.Label(root, image = img)
@@ -241,10 +280,10 @@ julia_rect = 0
 # Methods of drawing
 method_draw_tric = ["./draw_mmap_n", "./draw_mmap_f", "./draw_bw", "./draw_colored"] # Types of drawing for the tricorn
 T = 0
-NAME_TRICORN_IMAGE = "tricorn.ppm"
+NAME_TRICORN_IMAGE = "./img/tricorn.ppm"
 method_draw_julia = ["./draw_j", "./draw_j_bw"] # Types of drawing for the tricorn
 J = 0
-NAME_JULIA_IMAGE = "julia.ppm"
+NAME_JULIA_IMAGE = "./img/julia.ppm"
 
 with open("./files/params", "w") as f:
     f.write(f'-2.0\n2.0\n-2.0\n2.0')
