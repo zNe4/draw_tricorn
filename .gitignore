@@ -5,6 +5,6 @@ draw_colored
 draw_mmap_n
 draw_mmap_f
 *.ppm
-files/*
+files/
 *.o
 !src/*
