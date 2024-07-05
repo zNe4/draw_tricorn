@@ -7,3 +7,4 @@ draw_mmap_f
 *.ppm
 files/*
 *.o
+!src/*
