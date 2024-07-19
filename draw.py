@@ -245,10 +245,10 @@ y = (hs/2) - (h/2)
 root.geometry('%dx%d+%d+%d' % (w, h, x, y))
 canvas1 = tk.Canvas(height=700, width=700)
 canvas1.pack()
-if not os.path.exists("./img/tricorn.png"):
-    print(f'Error: file does not exists: img/tricorn.png. Try downloading it from the git repository or using imgmagick to create a new one.')
+if not os.path.exists("./img/tricorn.jpg"):
+    print(f'Error: file does not exists: img/tricorn.jpg. Try downloading it from the git repository or using imgmagick to create a new one.')
     exit()
-img1 = ImageTk.PhotoImage(Image.open("./img/tricorn.png"))
+img1 = ImageTk.PhotoImage(Image.open("./img/tricorn.jpg"))
 imgContainer1 = canvas1.create_image(0, 0, image=img1, anchor='nw')
 tricorn_rect = 0
 
@@ -272,10 +272,10 @@ for i in range(10):
 
 canvas2 = tk.Canvas(root2, height=700, width=700)
 canvas2.pack()
-if not os.path.exists("./img/julia.png"):
-    print(f'Error: file does not exists: img/julia.png. Try downloading it from the git repository or using imgmagick to create a new one.')
+if not os.path.exists("./img/julia.jpg"):
+    print(f'Error: file does not exists: img/julia.jpg. Try downloading it from the git repository or using imgmagick to create a new one.')
     exit()
-img2 = ImageTk.PhotoImage(Image.open("./img/julia.png"))
+img2 = ImageTk.PhotoImage(Image.open("./img/julia.jpg"))
 imgContainer2 = canvas2.create_image(0, 0, image=img2, anchor='nw')
 julia_rect = 0
 # panel = tk.Label(root, image = img)
