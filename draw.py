@@ -2,6 +2,7 @@ import tkinter as tk
 from PIL import ImageTk, Image
 import time
 from subprocess import call
+import os
 
 def redraw_julia():
     global method_draw_julia, J, NAME_JULIA_IMAGE
@@ -239,11 +240,14 @@ h = 700
 ws = root.winfo_screenwidth()
 hs = root.winfo_screenheight()
 
-x = (ws/2) - (w/2) - 350
+x = (ws/2) - (w/2) - 355
 y = (hs/2) - (h/2)
 root.geometry('%dx%d+%d+%d' % (w, h, x, y))
 canvas1 = tk.Canvas(height=700, width=700)
 canvas1.pack()
+if not os.path.exists("./img/tricorn.png"):
+    print(f'Error: file does not exists: img/tricorn.png. Try downloading it from the git repository or using imgmagick to create a new one.')
+    exit()
 img1 = ImageTk.PhotoImage(Image.open("./img/tricorn.png"))
 imgContainer1 = canvas1.create_image(0, 0, image=img1, anchor='nw')
 tricorn_rect = 0
@@ -251,7 +255,7 @@ tricorn_rect = 0
 
 
 root2 = tk.Toplevel()
-x = (ws/2) - (w/2) + 350
+x = (ws/2) - (w/2) + 355
 root2.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
 root2.bind("<Escape>", stop)
@@ -268,6 +272,9 @@ for i in range(10):
 
 canvas2 = tk.Canvas(root2, height=700, width=700)
 canvas2.pack()
+if not os.path.exists("./img/julia.png"):
+    print(f'Error: file does not exists: img/julia.png. Try downloading it from the git repository or using imgmagick to create a new one.')
+    exit()
 img2 = ImageTk.PhotoImage(Image.open("./img/julia.png"))
 imgContainer2 = canvas2.create_image(0, 0, image=img2, anchor='nw')
 julia_rect = 0
@@ -292,6 +299,6 @@ with open("./files/params2", "w") as f:
 Tx = Ty = 0.0
 Tx_new = Ty_new = 0.0
 Txmin = Tymin = Jxmin = Jymin = -2.0
-Txmax = Tymax = Jxmax = Jymax = -2.0
+Txmax = Tymax = Jxmax = Jymax = 2.0
 
 root.mainloop()
