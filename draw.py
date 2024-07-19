@@ -290,6 +290,10 @@ T = 0
 NAME_TRICORN_IMAGE = "./img/tricorn.ppm"
 method_draw_julia = ["./draw_j", "./draw_j_bw"] # Types of drawing for the tricorn
 J = 0
+for f in method_draw_julia + method_draw_tric:
+    if not os.path.exists(f):
+        print(f'Error: File does not exist: {f}. Try running make again.')
+        exit()
 NAME_JULIA_IMAGE = "./img/julia.ppm"
 
 with open("./files/params", "w") as f:
