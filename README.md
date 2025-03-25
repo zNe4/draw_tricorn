@@ -11,7 +11,7 @@ Tested with python 3.13.2 and gcc 14.2.1 on arch linux.
 # Usage
 Caution: The python funcion subprocess.call() is used in order to run the c code in the python GUI, which may be unsafe.
 
-To use the program just execute `make` the program and run `python draw.py` inside the containing folder.
+To use the program just execute `make` to compile the program and then run `python draw.py` inside the containing folder.
 
 - To redraw a Julia set for a c value, left click on any part of the the image of the tricorn.
 - To zoom into an image, left click and drag on an area of the image.
