@@ -5,7 +5,7 @@ Most of the code was adapted from https://commons.wikimedia.org/wiki/File:Mandel
 
 The python code is not pretty since I'm not so familiar with making GUIs.
 
-# Requisites
+# Requirements
 Tested with python 3.13.2 and gcc 14.2.1 on arch linux.
 
 # Usage
