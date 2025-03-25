@@ -16,7 +16,6 @@ const double infinity = 1.0 / 0.0;
 const double colour_modulus = 5.7581917135421046e-2; // (1.0 + 1.0 / (phi * phi)) / 24.0;
 const double ER2 = 2.0 * 2.0; // ER*ER
 const double EPS2 = 1e-100 * 1e-100; // EPS*EPS
-const int rep = 20;
 
 static inline double cabs2(complex double z) {
   return creal(z) * creal(z) + cimag(z) * cimag(z);
@@ -79,17 +78,17 @@ static inline void colour_to_bytes(double r, double g, double b, int *r_out, int
 //   double r, g, b
 // }
 
-static inline void color_tricorn(unsigned char *image, int width, int i, int j, double intRadius, int k) {
+static inline void color_tricorn(unsigned char *image, int width, int i, int j, int period, double intRadius, int k) {
   double r, g, b;
   colour_hsv_to_rgb(k * colour_modulus, 0.5, 1.0, &r, &g, &b);
   int ir, ig, ib;
   colour_to_bytes(r, g, b, &ir, &ig, &ib);
   
   //generate internal grid 
-  if (intRadius < 1.0) { //<1.0){
+  if (intRadius<1.0){
     int rMax=15; /* number of color segments */
     double m=rMax * intRadius;
-    int im= (int) m; // integer of m
+    int im=(int)m; // integer of m
 
     // int aMax=15; /* number of color segments */
     // double k2=aMax; // * intAngle;
@@ -101,7 +100,68 @@ static inline void color_tricorn(unsigned char *image, int width, int i, int j, 
   image_poke(image, width, i, j, ir, ig, ib);
 }
 
-static inline void render(unsigned char *image,  int pMax, int width, int height, float xmin, float ymin, float xmax, float ymax) {
+/* newton function : N(z) = z - (fp(z)-z)/f'(z)) */
+
+complex double N( complex double c, complex double zn , int pMax, double er2, int repeat){
+  complex double z = zn;
+  complex double z_next = 1.0;
+  complex double d = 1.0; /* d = first derivative with respect to z */
+  int p;
+  for (p=0; p < pMax; p++){ // find periodic point of period p
+    for (int r=0; r<repeat -1; r++) z_next = z_next * z;
+    d = repeat*z_next*d;
+    z = z_next * z + c;
+    z_next = 1.0;
+  }
+  z = zn - (z - zn)/(d - 1.0);
+  return z;
+}
+
+complex double GivePeriodic(complex double c, complex double z0, int period, double eps2, double er2, int repeat){
+  complex double z = z0;
+  complex double zPrev = z0; // previous value of z
+  int n ; // iteration
+  const int nMax = 128;
+
+  for (n=0; n<nMax; n++) {
+    z = N(c, z, period, er2, repeat);
+    if (cabs2(z - zPrev)< eps2) break;
+  }
+  return z;
+}
+
+complex double ApproximateMultiplierMap(complex double c, int period, double eps2, double er2, int repeat){
+     
+    complex double z;  // variable z 
+    complex double zp ; // periodic point 
+    complex double zcr = c;
+    complex double d = 1.0;
+    complex double z_next = 1.0;
+    int p;
+    zp =  GivePeriodic(c, zcr, period,  eps2, er2, repeat);
+    if ( cabs2(zp)<er2) {
+      z = zp;
+      for (p=0; p < period; p++){
+	for (int r=0; r<repeat-1; r++) z_next = z_next * z;
+        d = repeat * z_next *d;
+	z = z_next * z + c;
+	z_next = 1.0;
+      }
+    } else return 1000000000;
+
+    return sqrt(cabs(d));
+}
+
+// double GiveTurn( double complex z){
+//   double t;
+
+//   t =  carg(z);
+//   t /= 2*pi; // now in turns
+//   if (t<0.0) t += 1.0; // map from (-1/2,1/2] to [0, 1) 
+//   return (t);
+// }
+
+static inline void render(unsigned char *image,  int pMax, int width, int height, float xmin, float ymin, float xmax, float ymax, int repeat) {
 
   #pragma omp parallel for schedule(dynamic, 1)
     for (int j = 0; j < height; ++j) {
@@ -110,33 +170,33 @@ static inline void render(unsigned char *image,  int pMax, int width, int height
         double y = ymin + j * (ymax - ymin)/height;
         complex double c = x + I * y;
 
-        // check if its inside and compute the multiplier map via Lyapunov exponents.
+        // check if its inside
         complex double z = 0.0;
         bool is_inside = true;
         int k=0;
-	double logsum = 0.0;
-	// double logsum = 0.0;
+	complex double z_next = 1.0;
         for (k=0; k<UCHAR_MAX; k++) {
-	  z = conj(z*z) + c;
-          // z = (z * z + conj(c)) * (z * z + conj(c)) + c;
-	  // logsum = logsum + log(cabs2(2 * z));
+	  for (int r=0; r<repeat; r++) z_next= z * z_next; 
+          z = z_next + c;
+	  z_next = 1.0;
           if (cabs2(z) > 4) {is_inside = false; break;}
         }
-        if (!is_inside) {color_tricorn(image, width, i, j, 0, UCHAR_MAX - k); continue;} 
-
         // done checking
         // k for channel h;
-	for (k=0; k<UCHAR_MAX*rep; k++) {
-	  z = conj(z*z) + c;
-          if (cabs2(z) > 4) {is_inside = false; break;}
-	  logsum = logsum + log(cabs2(2*z));
-	}
-        if (!is_inside) {color_tricorn(image, width, i, j, 0, UCHAR_MAX - (k / rep)); continue;} 
-	
-	// Now calculate logsum with new values
-	double iRadius = logsum / (2 * k);
-	iRadius = iRadius > 0 ? iRadius : -iRadius;
-	color_tricorn(image, width, i, j, iRadius, UCHAR_MAX - (k / rep)); // Can add iAngle
+
+        if (!is_inside) {color_tricorn(image, width, i, j, 0, 0, UCHAR_MAX - k); continue;}
+        double iRadius = 1.0;
+        int period = 0;
+        // find period and w 
+        for (int p = 1; p < pMax; p++){
+          iRadius =  ApproximateMultiplierMap(c,p, EPS2, ER2, repeat);
+          if ( iRadius <= 1.0) {
+            // iAngle = GiveTurn(w);
+            period=p;
+            break;
+          }
+        }
+        color_tricorn(image, width, i, j, period, iRadius, UCHAR_MAX - k); // Can add iAngle
       }
     }
 }
@@ -145,6 +205,7 @@ int main() {
   int PeriodMax = 20;
   int width = 700;
   int height = 700;
+  int rep = 3;
   //
   //
       float xmin, xmax, ymin, ymax; // Borders of the area to be plotted
@@ -158,7 +219,7 @@ int main() {
   //
   const char *filename = "./img/tricorn.ppm";
   unsigned char *image = image_new(width, height);
-  render(image,  PeriodMax, width, height, xmin, ymin, xmax, ymax);
+  render(image,  PeriodMax, width, height, xmin, ymin, xmax, ymax, rep);
   image_save_ppm(image, width, height, filename);
   image_delete(image);
   return 0;

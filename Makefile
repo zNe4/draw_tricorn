@@ -49,7 +49,7 @@ LIB=$(MTH) # $(LDLIBS)
 # COMMON=imagelib
 
 # Directorios que serán compilados a un programa
-PROGRAMS=draw_bw draw_colored draw_j draw_j_bw draw_mmap_f draw_mmap_n
+PROGRAMS=draw_bw draw_colored draw_j draw_j_bw draw_mmap_f draw_mmap_n draw_multibrot
 
 # Todos los directorios que contienen archivos de código
 SRCDIR=$(COMMON) $(PROGRAMS)

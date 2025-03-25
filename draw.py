@@ -3,6 +3,8 @@ from PIL import ImageTk, Image
 import time
 from subprocess import call
 import os
+# from tricorn_logic import *
+# from tricorn_gui import *
 
 def redraw_julia():
     global method_draw_julia, J, NAME_JULIA_IMAGE
@@ -188,6 +190,11 @@ def change_newton(event):
     T=0
     redraw_tricorn()
 
+def change_lyapunov(event):
+    global T
+    T=1
+    redraw_tricorn()
+
 def change_grayscale(event):
     global T
     T=2
@@ -232,6 +239,7 @@ root.bind("r", reset)
 root.bind("b", change_grayscale)
 root.bind("c", change_colored)
 root.bind("n", change_newton)
+root.bind("l", change_lyapunov)
 for i in range(10):
     root.bind(str(i), num_handler_tricorn)
 
