@@ -1,11 +1,6 @@
-draw_j
-draw_bw
-draw_j_bw
-draw_colored
-draw_mmap_n
-draw_mmap_f
-.git/
-.__pychache__/
-*.ppm
-*.o
-!src/*
+__pycache__/
+*.py[cod]
+.venv/
+build/
+output/
+qa*/
